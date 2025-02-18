@@ -65,7 +65,7 @@ These adaptive features allow the strategy to:
 - Optimize trade timing based on market dynamics
 
 ### Model Architecture
-The core prediction engine employs a sophisticated dual-model Random Forest approach that balances conservative and aggressive prediction strategies. This architecture was specifically designed to address the challenge of achieving optimal precision-recall tradeoffs in ETF price prediction.
+The core prediction engine employs a dual-model Random Forest approach that balances conservative and aggressive prediction strategies. This architecture was specifically designed to address the challenge of achieving optimal precision-recall tradeoffs in ETF price prediction.
 
 The dual-model system consists of two distinct Random Forest classifiers with carefully tuned parameters. Each model serves a specific purpose in the prediction framework:
 ```python
