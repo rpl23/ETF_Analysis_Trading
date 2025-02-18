@@ -230,7 +230,59 @@ def create_adaptive_features(df, window_short=5, window_long=20):
 
     return features.dropna()
 ```
+Strategy Risk Metrics:
+Annualized Return: 0.0745
+Annualized Volatility: 0.0312
+Sharpe Ratio: 2.3929
+Max Drawdown: 0.0281
+Win Rate: 0.1324
 
+Annualized Return (7.45%):
+Moderate return that's above risk-free rates but not extremely high
+Suggests a relatively conservative trading approach
+Could indicate good risk management but might be leaving some potential returns on the table
+
+
+Annualized Volatility (3.12%):
+This is remarkably low volatility
+Indicates very strong risk control in the strategy
+Suggests consistent, stable returns rather than large swings
+Much lower than typical ETF volatility (which often ranges from 15-30%)
+
+
+Sharpe Ratio (2.39):
+This is an excellent Sharpe ratio (anything above 1 is considered good, above 2 is exceptional)
+Shows very good risk-adjusted returns
+The high ratio is driven primarily by the extremely low volatility rather than high returns
+Suggests the strategy is very efficient at extracting returns while minimizing risk
+
+
+Max Drawdown (2.81%):
+Extremely low maximum drawdown
+Indicates excellent downside protection
+Much better than typical ETF strategies which often see 20%+ drawdowns
+Suggests robust risk management and stop-loss implementation
+
+
+Win Rate (13.24%):
+This is a surprisingly low win rate
+However, when combined with the positive returns and high Sharpe ratio, it suggests that:
+
+The strategy is taking relatively few trades
+When trades are taken, the winners must be significantly larger than the losers
+The strategy is selective about entry points
+Using tight stop losses on losing trades
+
+![image](https://github.com/user-attachments/assets/94ad1b2d-7f16-43b6-9568-d375abc4069d)
+
+
+Overall Assessment:
+
+This appears to be a highly conservative, risk-focused strategy
+It prioritizes capital preservation over aggressive returns
+The combination of low volatility, low drawdown, and decent returns despite low win rate suggests a "turtle-like" approach: slow and steady wins the race
+The strategy might benefit from some selective increase in risk-taking given the strong risk management demonstrated
+Could be particularly suitable for risk-averse investors or as part of a larger portfolio
 ## CONCLUSION
 
 This research demonstrates the effectiveness of a dual-model Random Forest approach for ETF trading, particularly in predicting traditional safe-haven assets and large-cap indices. Key findings include:
