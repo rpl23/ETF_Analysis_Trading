@@ -446,6 +446,7 @@ print("\nPerformance by ETF:")
 print(etf_performance)
 ```
 ##Completed Trade Stats
+
 Overall Trading Performance:
 total_trades: 19
 winning_trades: 15
