@@ -275,6 +275,253 @@ Using tight stop losses on losing trades
 
 ![image](https://github.com/user-attachments/assets/94ad1b2d-7f16-43b6-9568-d375abc4069d)
 
+##TRADE LOGGER
+
+```python
+# TradeLogger class to track and analyze trading activity
+class TradeLogger:
+    def __init__(self):
+        # Define the structure of our trade log with specific data types
+        # This ensures data consistency and proper DataFrame operations
+        self.columns = {
+            'date': 'datetime64[ns]',      # Timestamp of the trade
+            'etf': 'str',                  # ETF symbol
+            'action': 'str',               # Type of trade action
+            'price': 'float64',            # Entry/exit price
+            'position_size': 'float64',    # Size of the position in dollars
+            'confidence': 'float64',       # Model confidence score
+            'pnl': 'float64',              # Profit/Loss for the trade
+            'holding_period': 'int64',     # Days position was held
+            'exit_price': 'float64'        # Price at position close
+        }
+        
+        # Create empty DataFrame with predefined structure
+        self.trades = pd.DataFrame({col: pd.Series(dtype=dtype) 
+                                  for col, dtype in self.columns.items()})
+        # Dictionary to track currently open positions
+        self.active_trades = {}
+
+    def log_entry(self, date, etf, price, position_size, confidence):
+        """
+        Record the opening of a new position
+        Creates a unique trade ID and stores entry information
+        """
+        # Create unique trade identifier using ETF and timestamp
+        trade_id = f"{etf}_{date.strftime('%Y%m%d_%H%M%S')}"
+        
+        # Store trade details in active_trades dictionary
+        self.active_trades[trade_id] = {
+            'date': date,
+            'etf': etf,
+            'entry_price': price,
+            'position_size': position_size,
+            'confidence': confidence
+        }
+
+    def log_exit(self, date, etf, price, trade_id):
+        """
+        Record the closing of a position and calculate trade metrics
+        Adds completed trade to the trades DataFrame
+        """
+        if trade_id in self.active_trades:
+            # Retrieve entry information
+            entry = self.active_trades[trade_id]
+            
+            # Calculate trade metrics
+            holding_period = (date - entry['date']).days
+            pnl = (price - entry['entry_price']) * entry['position_size']
+            
+            # Create new trade record
+            new_trade = pd.DataFrame([{
+                'date': entry['date'],
+                'etf': etf,
+                'action': 'round_trip',
+                'price': entry['entry_price'],
+                'position_size': entry['position_size'],
+                'confidence': entry['confidence'],
+                'pnl': pnl,
+                'holding_period': holding_period,
+                'exit_price': price
+            }])
+            
+            # Ensure data types match the predefined structure
+            for col, dtype in self.columns.items():
+                new_trade[col] = new_trade[col].astype(dtype)
+            
+            # Add new trade to trade history
+            self.trades = pd.concat([self.trades, new_trade], ignore_index=True)
+            
+            # Remove from active trades
+            del self.active_trades[trade_id]
+
+def track_trading_activity(predictions, data, trade_logger, lookforward_period=5):
+    """
+    Main function to track all trading activity based on model predictions
+    Monitors position entries and exits over time
+    """
+    # Dictionary to track current open positions
+    current_positions = {}
+    
+    # Iterate through all predictions (except last lookforward_period days)
+    for i in range(len(predictions) - lookforward_period):
+        current_date = predictions.index[i]
+        next_date = predictions.index[i + lookforward_period]
+        
+        # Check each ETF for potential trades
+        for etf in ['SPY', 'GLD', 'XLF', 'XLK']:
+            position = predictions.loc[current_date, f'{etf}_position']
+            confidence = predictions.loc[current_date, f'{etf}_prob']
+            current_price = data.loc[current_date, f'{etf}_Close']
+            
+            # Open new position if signal is positive and no current position
+            if position > 0 and etf not in current_positions:
+                trade_id = f"{etf}_{current_date.strftime('%Y%m%d_%H%M%S')}"
+                current_positions[etf] = trade_id
+                trade_logger.log_entry(
+                    current_date, etf, current_price, 
+                    position, confidence
+                )
+            
+            # Close position if signal is zero and position exists
+            elif position == 0 and etf in current_positions:
+                trade_logger.log_exit(
+                    next_date, etf, 
+                    data.loc[next_date, f'{etf}_Close'],
+                    current_positions[etf]
+                )
+                del current_positions[etf]
+
+    return trade_logger.trades
+
+def analyze_trade_performance(trade_history):
+    """
+    Calculate comprehensive trading statistics and performance metrics
+    """
+    if len(trade_history) == 0:
+        return {"error": "No trades to analyze"}
+        
+    # Calculate basic trading statistics
+    analysis = {
+        'total_trades': len(trade_history),
+        'winning_trades': len(trade_history[trade_history['pnl'] > 0]),
+        'losing_trades': len(trade_history[trade_history['pnl'] < 0]),
+        'avg_holding_period': trade_history['holding_period'].mean(),
+        'avg_win': trade_history[trade_history['pnl'] > 0]['pnl'].mean() 
+                  if len(trade_history[trade_history['pnl'] > 0]) > 0 else 0,
+        'avg_loss': trade_history[trade_history['pnl'] < 0]['pnl'].mean() 
+                   if len(trade_history[trade_history['pnl'] < 0]) > 0 else 0,
+        'largest_win': trade_history['pnl'].max() if len(trade_history) > 0 else 0,
+        'largest_loss': trade_history['pnl'].min() if len(trade_history) > 0 else 0
+    }
+    
+    # Calculate profit factor (total gains / total losses)
+    total_gains = trade_history[trade_history['pnl'] > 0]['pnl'].sum()
+    total_losses = abs(trade_history[trade_history['pnl'] < 0]['pnl'].sum())
+    analysis['profit_factor'] = total_gains / total_losses if total_losses != 0 else float('inf')
+    
+    # Calculate win rate
+    analysis['win_rate'] = analysis['winning_trades'] / analysis['total_trades'] \
+                          if analysis['total_trades'] > 0 else 0
+    
+    # Calculate performance metrics grouped by ETF
+    etf_performance = trade_history.groupby('etf').agg({
+        'pnl': ['count', 'mean', 'sum'],        # Trade count, avg P&L, total P&L
+        'holding_period': 'mean',                # Average holding period
+        'confidence': 'mean'                     # Average confidence score
+    }).round(4)
+    
+    return analysis, etf_performance
+
+# Example of how to use the trade tracking system
+trade_logger = TradeLogger()
+trade_history = track_trading_activity(predictions, data, trade_logger)
+analysis, etf_performance = analyze_trade_performance(trade_history)
+
+# Print the results
+print("\nOverall Trading Performance:")
+for metric, value in analysis.items():
+    print(f"{metric}: {value:.4f}" if isinstance(value, float) else f"{metric}: {value}")
+
+print("\nPerformance by ETF:")
+print(etf_performance)
+```
+##Completed Trade Stats
+Overall Trading Performance:
+total_trades: 19
+winning_trades: 15
+losing_trades: 4
+avg_holding_period: 18.5789
+avg_win: 3389.7664
+avg_loss: -2980.8310
+largest_win: 25554.9224
+largest_loss: -9128.7901
+profit_factor: 4.2645
+win_rate: 0.7895
+
+Performance by ETF:
+      pnl                         holding_period confidence
+    count        mean         sum           mean       mean
+etf                                                        
+GLD     6  -1192.1203  -7152.7218        13.6667     0.6090
+SPY     1  25554.9224  25554.9224        45.0000     0.6142
+XLF     1   2616.1196   2616.1196        56.0000     0.6193
+XLK    11   1627.7137  17904.8512        15.4545     0.6077
+
+The overall performance shows very strong trading results:
+
+Win Rate and Trade Quality:
+
+
+Outstanding win rate of 78.95% (15 winning trades out of 19 total)
+Strong profit factor of 4.26 (winning trades made 4.26x more than losing trades lost)
+Average win ($3,389.77) is higher than average loss (-$2,980.83)
+Largest win ($25,554.92) significantly exceeds largest loss (-$9,128.79)
+
+
+ETF-Specific Performance:
+
+
+XLK (Technology):
+
+Most active with 11 trades
+Consistent performer with average profit of $1,627.71 per trade
+Relatively short holding period of 15.45 days
+Total profit of $17,904.85
+
+
+GLD (Gold):
+
+6 trades with negative performance
+Average loss of -$1,192.12 per trade
+Shortest average holding period at 13.67 days
+Total loss of -$7,152.72
+
+
+SPY (S&P 500):
+
+Single highly successful trade
+Largest individual profit of $25,554.92
+Longer holding period of 45 days
+Highest confidence score at 0.6142
+
+
+XLF (Financials):
+
+Single profitable trade
+Gain of $2,616.12
+Longest holding period at 56 days
+Highest confidence score at 0.6193
+
+
+
+Key Insights:
+
+The strategy shows excellent selectivity with a high win rate
+Risk management appears effective with losses well contained
+Technology sector (XLK) provides most consistent trading opportunities
+Gold trades (GLD) might need strategy adjustment
+Confidence levels are consistently around 0.61, suggesting stable signal generation
+
 
 Overall Assessment:
 
