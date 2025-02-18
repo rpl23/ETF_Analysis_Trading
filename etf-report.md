@@ -129,32 +129,60 @@ These factors are synthesized into a confidence score that directly influences p
 
 #### Portfolio Construction
 ```python
+# Function to create and manage trading signals and positions
 def create_trading_strategy(data, models, X_test_combined, confidence_threshold=0.6):
+    # Initialize predictions DataFrame with the same timeframe as our test data
+    # This will store all our signals, positions, and portfolio metrics
     predictions = pd.DataFrame(index=data.index[-len(X_test_combined):])
 
+    # Generate trading signals for each ETF in our universe
     for etf in ['SPY', 'GLD', 'XLF', 'XLK']:
         model = models[etf]
+        # Get probability predictions from our model
+        # probas[:, 1] gives us probability of upward movement
         probas = model.predict_proba(X_test_combined)
         predictions[f'{etf}_prob'] = probas[:, 1]
+        # Create binary trading signals (1 = buy, 0 = no position)
+        # Only generate signal if confidence exceeds our threshold
         predictions[f'{etf}_signal'] = (probas[:, 1] > confidence_threshold).astype(int)
 
-    # Calculate position sizes based on confidence
-    portfolio_size = 100000  # Example $100k portfolio
-    max_position_size = 0.25  # Maximum 25% in any single position
-
+    # Set portfolio management parameters
+    portfolio_size = 100000  # Starting with $100k portfolio
+    max_position_size = 0.25  # Maximum 25% allocation per ETF
+    
+    # Calculate dynamic position sizes for each ETF
     for etf in ['SPY', 'GLD', 'XLF', 'XLK']:
         confidence = predictions[f'{etf}_prob']
+        
+        # Dynamic position sizing based on model confidence
+        # Position size increases linearly with confidence above threshold
+        # Example: 
+        # - If confidence = 0.8 and threshold = 0.6:
+        # - Position = $100k * 0.25 * (0.8 - 0.6) / (1 - 0.6)
+        # - Position = $100k * 0.25 * 0.2 / 0.4
+        # - Position = $12.5k (12.5% of portfolio)
         predictions[f'{etf}_position'] = np.where(
             confidence > confidence_threshold,
+            # Calculate position size when confidence exceeds threshold
             portfolio_size * max_position_size * (confidence - confidence_threshold) / 
             (1 - confidence_threshold),
+            # No position if confidence below threshold
             0
         )
 
+    # Risk management calculations
+    # Track total portfolio exposure by summing all ETF positions
     predictions['total_exposure'] = predictions[[f'{etf}_position' 
         for etf in ['SPY', 'GLD', 'XLF', 'XLK']]].sum(axis=1)
+    # Calculate remaining cash position
     predictions['cash'] = portfolio_size - predictions['total_exposure']
 
+    # Final predictions DataFrame contains:
+    # - Probability scores for each ETF
+    # - Binary trading signals
+    # - Position sizes in dollars
+    # - Total portfolio exposure
+    # - Remaining cash
     return predictions
 ```
 
