@@ -116,7 +116,7 @@ Based on the final balanced model implementation, performance metrics across dif
 
 ### Trading Strategy Implementation
 
-The trading strategy employs a sophisticated approach that combines model predictions with dynamic position sizing and risk management. The strategy focuses on the four best-performing ETFs (SPY, GLD, XLF, and XLK) identified through extensive backtesting and performance analysis.
+The trading strategy is an approach that combines model predictions with dynamic position sizing and risk management. The strategy focuses on the four best-performing ETFs (SPY, GLD, XLF, and XLK) identified through extensive backtesting and performance analysis.
 
 #### Signal Generation and Confidence Assessment
 The strategy begins with signal generation from the dual-model system. Each trade signal is evaluated based on:
