@@ -14,7 +14,7 @@ As ETFs continue to dominate modern investment landscapes, developing reliable f
 ## RESEARCH METHODOLOGY
 
 ### Data Collection and Processing
-Our dataset, sourced from Yahoo Finance, comprises daily price and volume data for eight major ETFs from 2018 to 2024. The data was partitioned into training (80%) and testing (20%) sets, with careful consideration for temporal ordering to prevent look-ahead bias.
+The dataset, sourced from Yahoo Finance, comprises daily price and volume data for eight major ETFs from 2018 to 2024. The data was partitioned into training (80%) and testing (20%) sets, with careful consideration for temporal ordering to prevent look-ahead bias.
 
 ### Feature Engineering
 ```python
@@ -78,11 +78,6 @@ conservative_clf = RandomForestClassifier(
     random_state=42
 )
 
-The conservative model prioritizes prediction stability and risk management through its restricted depth and larger leaf size requirements. Its modest class weight bias (2:1) helps maintain balanced predictions while slightly favoring potential opportunities. This model excels at identifying high-probability trading signals with minimal false positives.
-
-The aggressive model, with its greater depth and more pronounced class weight bias (4:1), is designed to capture more subtle market opportunities that the conservative model might miss. This model is particularly effective during trending markets where more aggressive positioning may be warranted.
-
-The predictions from both models are combined using a weighted average approach, with the conservative model given a 70% weight and the aggressive model a 30% weight. This weighting scheme helps maintain overall strategy stability while still allowing for opportunistic trades when high-confidence signals emerge.
 
 # Aggressive model for opportunity capture
 aggressive_clf = RandomForestClassifier(
@@ -93,6 +88,11 @@ aggressive_clf = RandomForestClassifier(
     random_state=42
 )
 ```
+The conservative model prioritizes prediction stability and risk management through its restricted depth and larger leaf size requirements. Its modest class weight bias (2:1) helps maintain balanced predictions while slightly favoring potential opportunities. This model excels at identifying high-probability trading signals with minimal false positives.
+
+The aggressive model, with its greater depth and more pronounced class weight bias (4:1), is designed to capture more subtle market opportunities that the conservative model might miss. This model is particularly effective during trending markets where more aggressive positioning may be warranted.
+
+The predictions from both models are combined using a weighted average approach, with the conservative model given a 70% weight and the aggressive model a 30% weight. This weighting scheme helps maintain overall strategy stability while still allowing for opportunistic trades when high-confidence signals emerge.
 
 ## RESULTS AND ANALYSIS
 
