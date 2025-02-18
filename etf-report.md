@@ -258,48 +258,64 @@ def create_adaptive_features(df, window_short=5, window_long=20):
 
     return features.dropna()
 ```
-Strategy Risk Metrics:
-Annualized Return: 0.0745
-Annualized Volatility: 0.0312
-Sharpe Ratio: 2.3929
-Max Drawdown: 0.0281
-Win Rate: 0.1324
+# ETF Trading Strategy Risk Analysis
 
-Annualized Return (7.45%):
-Moderate return that's above risk-free rates but not extremely high
-Suggests a relatively conservative trading approach
-Could indicate good risk management but might be leaving some potential returns on the table
+## Key Performance Metrics
 
+| Metric | Value | Industry Benchmark |
+|--------|--------|-------------------|
+| Annualized Return | 7.45% | 5-10% (typical) |
+| Annualized Volatility | 3.12% | 15-30% (typical) |
+| Sharpe Ratio | 2.39 | >1 (good), >2 (exceptional) |
+| Max Drawdown | 2.81% | 20%+ (typical) |
+| Win Rate | 13.24% | 40-60% (typical) |
 
-Annualized Volatility (3.12%):
-This is remarkably low volatility
-Indicates very strong risk control in the strategy
-Suggests consistent, stable returns rather than large swings
-Much lower than typical ETF volatility (which often ranges from 15-30%)
+## Detailed Analysis
 
+### Annualized Return (7.45%)
+- Demonstrates solid performance above risk-free rates
+- Indicates conservative trading approach
+- Balanced risk-reward profile
+- Potential room for optimization while maintaining risk controls
 
-Sharpe Ratio (2.39):
-This is an excellent Sharpe ratio (anything above 1 is considered good, above 2 is exceptional)
-Shows very good risk-adjusted returns
-The high ratio is driven primarily by the extremely low volatility rather than high returns
-Suggests the strategy is very efficient at extracting returns while minimizing risk
+### Annualized Volatility (3.12%)
+- Exceptionally low volatility profile
+- Significantly outperforms typical ETF volatility range (15-30%)
+- Indicates:
+  - Strong risk management implementation
+  - Consistent, stable return generation
+  - Effective position sizing and portfolio management
 
+### Sharpe Ratio (2.39)
+- Exceptional risk-adjusted return metric
+- Driven primarily by extremely low volatility
+- Demonstrates:
+  - Superior risk management
+  - Efficient capital allocation
+  - Robust strategy design
 
-Max Drawdown (2.81%):
-Extremely low maximum drawdown
-Indicates excellent downside protection
-Much better than typical ETF strategies which often see 20%+ drawdowns
-Suggests robust risk management and stop-loss implementation
+### Max Drawdown (2.81%)
+- Outstanding downside protection
+- Significantly better than industry standard (20%+)
+- Suggests:
+  - Effective stop-loss implementation
+  - Strong risk controls
+  - Well-designed exit strategies
 
+### Win Rate (13.24%)
+- Lower than typical trading strategies
+- However, combined with positive metrics, indicates:
+  - Highly selective trade entry criteria
+  - Large positive risk-reward ratio on winning trades
+  - Effective use of tight stop losses
+  - Quality over quantity approach to trade selection
 
-Win Rate (13.24%):
-This is a surprisingly low win rate
-However, when combined with the positive returns and high Sharpe ratio, it suggests that:
+## Key Takeaways
 
-The strategy is taking relatively few trades
-When trades are taken, the winners must be significantly larger than the losers
-The strategy is selective about entry points
-Using tight stop losses on losing trades
+1. The strategy exhibits exceptional risk management characteristics
+2. Trading approach favors quality over quantity in trade selection
+3. Performance metrics suggest a robust, conservative trading system
+4. Strategy could potentially be optimized for higher returns while maintaining strong risk controls
 
 ![image](https://github.com/user-attachments/assets/94ad1b2d-7f16-43b6-9568-d375abc4069d)
 
