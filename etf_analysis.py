@@ -426,7 +426,7 @@ for etf in etf_list:
     print(f"\nTop 5 Important Features for {etf}:")
     print(feature_importance.sort_values('importance', ascending=False).head(5))
 
-# Let's also analyze how often different ETFs agree on direction
+# analyze how often different ETFs agree on direction
 test_predictions = pd.DataFrame(index=X_test.index)
 for etf in etf_list:
     test_predictions[etf] = predict_with_threshold(etf_models[etf], X_test_scaled, threshold=0.3)
