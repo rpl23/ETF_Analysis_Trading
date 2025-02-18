@@ -447,36 +447,33 @@ print(etf_performance)
 ```
 ##Completed Trade Stats
 
-Overall Trading Performance:
-total_trades: 19
-winning_trades: 15
-losing_trades: 4
-avg_holding_period: 18.5789
-avg_win: 3389.7664
-avg_loss: -2980.8310
-largest_win: 25554.9224
-largest_loss: -9128.7901
-profit_factor: 4.2645
-win_rate: 0.7895
+### Completed Trade Statistics
 
-Performance by ETF:
-      pnl                         holding_period confidence
-    count        mean         sum           mean       mean
-etf                                                        
-GLD     6  -1192.1203  -7152.7218        13.6667     0.6090
-SPY     1  25554.9224  25554.9224        45.0000     0.6142
-XLF     1   2616.1196   2616.1196        56.0000     0.6193
-XLK    11   1627.7137  17904.8512        15.4545     0.6077
+#### Overall Performance Metrics
 
-The overall performance shows very strong trading results:
+| Metric | Value |
+|--------|-------|
+| Total Trades | 19 |
+| Winning Trades | 15 |
+| Losing Trades | 4 |
+| Win Rate | 78.95% |
+| Average Holding Period | 18.58 days |
+| Average Win | $3,389.77 |
+| Average Loss | -$2,980.83 |
+| Largest Win | $25,554.92 |
+| Largest Loss | -$9,128.79 |
+| Profit Factor | 4.26 |
 
-Win Rate and Trade Quality:
+#### Performance by ETF
 
+| ETF | Trade Count | Average P&L | Total P&L | Avg Holding Period | Avg Confidence |
+|-----|-------------|-------------|-----------|-------------------|----------------|
+| XLK | 11 | $1,627.71 | $17,904.85 | 15.45 days | 0.6077 |
+| GLD | 6 | -$1,192.12 | -$7,152.72 | 13.67 days | 0.6090 |
+| SPY | 1 | $25,554.92 | $25,554.92 | 45.00 days | 0.6142 |
+| XLF | 1 | $2,616.12 | $2,616.12 | 56.00 days | 0.6193 |
 
-Outstanding win rate of 78.95% (15 winning trades out of 19 total)
-Strong profit factor of 4.26 (winning trades made 4.26x more than losing trades lost)
-Average win ($3,389.77) is higher than average loss (-$2,980.83)
-Largest win ($25,554.92) significantly exceeds largest loss (-$9,128.79)
+The strategy completed 19 trades across four ETFs during the testing period, achieving a high win rate of 78.95% and a strong profit factor of 4.26. The technology sector (XLK) provided the most consistent trading opportunities with 11 trades, while SPY delivered the largest single trade profit of $25,554.92. GLD was the only ETF to show negative overall performance, suggesting potential need for parameter adjustment in gold trading signals.
 
 
 ETF-Specific Performance:
