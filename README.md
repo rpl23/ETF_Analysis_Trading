@@ -78,12 +78,12 @@ etf_trading_strategy/
 - Sector-specific constraints
 - Dynamic risk management
 
-## Performance Metrics
-
-- Accuracy: 68.2% (SPY), 72.1% (GLD)
-- Sharpe Ratio: 1.24
-- Max Drawdown: -12.3%
-- Win Rate: 62.7%
+Strategy Risk Metrics:
+Annualized Return: 0.0745
+Annualized Volatility: 0.0312
+Sharpe Ratio: 2.3929
+Max Drawdown: 0.0281
+Win Rate: 0.1324
 
 ## Requirements
 
