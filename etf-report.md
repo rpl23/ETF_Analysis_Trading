@@ -445,7 +445,6 @@ for metric, value in analysis.items():
 print("\nPerformance by ETF:")
 print(etf_performance)
 ```
-##Completed Trade Stats
 
 ### Completed Trade Statistics
 
@@ -478,7 +477,6 @@ The strategy completed 19 trades across four ETFs during the testing period, ach
 
 ETF-Specific Performance:
 
-
 XLK (Technology):
 
 Most active with 11 trades
@@ -493,7 +491,6 @@ GLD (Gold):
 Average loss of -$1,192.12 per trade
 Shortest average holding period at 13.67 days
 Total loss of -$7,152.72
-
 
 SPY (S&P 500):
 
@@ -510,8 +507,6 @@ Gain of $2,616.12
 Longest holding period at 56 days
 Highest confidence score at 0.6193
 
-
-
 Key Insights:
 
 The strategy shows excellent selectivity with a high win rate
@@ -519,7 +514,6 @@ Risk management appears effective with losses well contained
 Technology sector (XLK) provides most consistent trading opportunities
 Gold trades (GLD) might need strategy adjustment
 Confidence levels are consistently around 0.61, suggesting stable signal generation
-
 
 Overall Assessment:
 
