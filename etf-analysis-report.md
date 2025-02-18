@@ -1,7 +1,7 @@
 # ETF Time Series Analysis and Trading Strategy Implementation
 
-Ryan Smith
-December 15, 2024
+Ryan Lancaster
+February 17, 2025
 
 ## ABSTRACT
 
