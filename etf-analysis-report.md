@@ -5,7 +5,7 @@ February 17, 2025
 
 ## ABSTRACT
 
-This research presents a systematic investigation into ETF price prediction and trading strategy implementation using machine learning techniques. By employing a dual-model Random Forest approach combined with comprehensive risk management frameworks, I develop a robust methodology for capturing market opportunities while maintaining strict risk controls. Our analysis encompasses eight major ETFs including SPY, QQQ, IWM, TLT, GLD, XLF, XLK, and XLE, providing insights into cross-asset relationships and sector-specific behavior patterns. Through rigorous model validation and performance analysis, this study demonstrates the superior predictive capacity of our dual-model approach, achieving accuracy rates of 68.2% for SPY, 72.1% for GLD, and 69.3% for XLF, while quantifying distinct volatility characteristics across different asset classes.
+This research presents a systematic investigation into ETF price prediction and trading strategy implementation using machine learning techniques. By employing a dual-model Random Forest approach combined with comprehensive risk management frameworks, I develop a robust methodology for capturing market opportunities while maintaining strict risk controls. My analysis encompasses eight major ETFs including SPY, QQQ, IWM, TLT, GLD, XLF, XLK, and XLE, providing insights into cross-asset relationships and sector-specific behavior patterns. Through rigorous model validation and performance analysis, this study demonstrates the superior predictive capacity of the dual-model approach, achieving accuracy rates of 68.2% for SPY, 72.1% for GLD, and 69.3% for XLF, while quantifying distinct volatility characteristics across different asset classes.
 
 ## INTRODUCTION
 
